@@ -2,12 +2,13 @@
 Supplementary code: reproducible analysis of procedural-unit (PU) acquisition
 across 3.3 Myr of the hominin lithic record.
 
-Companion to:
-    Foley, D. (2026). "From Typology to Physics: A Physical Definition of
-    Technology Tested Across 3.3 Million Years of Hominin Evolution."
-    Submitted to the Journal of Anthropological Sciences.
+Companion to an earlier version of the analysis in:
+    Foley, D. "Technology as Boundary-Extending Motion: A Physical Mechanism
+    for Hominin Evolution." Manuscript.
+    The current manuscript restricts some tests to the 145 hominin
+    assemblages and adds further tests; this script uses all 155 entries.
 
-Reproduces the empirical claims in §4 (quantitative tests) of the manuscript:
+Tests run:
 
     1. Cumulative procedural diversity follows an exponential trajectory
        across 3.3 Myr (linear vs. exponential model comparison).
@@ -18,10 +19,13 @@ Reproduces the empirical claims in §4 (quantitative tests) of the manuscript:
     4. Repertoire is irreversible: no PU disappears after first appearance.
 
 Usage:
-    python supplementary_pu_acceleration_analysis.py
+    python supplementary_pu_acceleration_analysis.py [path/to/dataset.csv]
+
+    With no argument, looks in the current directory for the CSV under its
+    Zenodo name ("procedural units obfus.csv") or "procedural_units_obfus.csv".
 
 Inputs:
-    procedural_units_obfus.csv  --  155 dated assemblages, 33 PU columns
+    procedural units obfus.csv  --  155 dated entries, 33 PU columns
                                     (Paige & Perreault 2023; Zenodo
                                     doi:10.5281/zenodo.7847839)
 
@@ -41,7 +45,7 @@ import matplotlib.pyplot as plt
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-CSV_PATH = "procedural_units_obfus.csv"
+CSV_NAMES = ("procedural units obfus.csv", "procedural_units_obfus.csv")
 FIG_PATH = "fig_pu_acceleration.pdf"
 RNG_SEED = 42
 N_PERMUTATIONS = 10_000
@@ -65,6 +69,21 @@ def load_dataset(path: str) -> pd.DataFrame:
     df = pd.read_csv(path, encoding="cp1252")
     df["age_mid"] = (df["KA.young"] + df["KA.old"]) / 2.0
     return df
+
+
+def find_dataset(args: list[str]) -> str:
+    """Return the CSV path given on the command line, or the first CSV_NAMES file present."""
+    import os
+
+    if args:
+        return args[0]
+    for name in CSV_NAMES:
+        if os.path.exists(name):
+            return name
+    sys.exit(
+        "Dataset not found. Download it from doi:10.5281/zenodo.7847839 and pass the path to\n"
+        "'procedural units obfus.csv', or run this script from the folder that contains it."
+    )
 
 
 def get_pu_columns(df: pd.DataFrame) -> list[str]:
@@ -267,7 +286,7 @@ def main() -> int:
     print("Supplementary analysis: PU acquisition across 3.3 Myr")
     print("=" * 72)
 
-    df = load_dataset(CSV_PATH)
+    df = load_dataset(find_dataset(sys.argv[1:]))
     pu_cols = get_pu_columns(df)
     print(f"\nLoaded {len(df)} assemblages with {len(pu_cols)} PU columns.")
     print(f"Age range: {df['age_mid'].min():.1f}--{df['age_mid'].max():.1f} ka.")
