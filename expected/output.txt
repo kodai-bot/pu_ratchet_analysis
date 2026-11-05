@@ -1,0 +1,37 @@
+========================================================================
+Supplementary analysis: PU acquisition across 3.3 Myr
+========================================================================
+
+Loaded 155 assemblages with 33 PU columns.
+Age range: 0.0--3270.0 ka.
+
+--- 1. Cumulative trajectory ---
+   Active PUs:               31
+   Linear fit:               R² = 0.873, RSS = 315.50
+   Exponential fit:          R² = 0.955, RSS = 112.82
+   RSS ratio (linear/exp):   2.80×
+   Doubling time:            929 kyr
+
+--- 2. Permutation test ---
+   Observed rate ratio (last 500 kyr / first 2.8 Myr): 3.54×
+   Null mean ratio:           1.02×
+   p-value:                   0.0020   (10,000 permutations)
+
+--- 3. Per-assemblage chain complexity ---
+          period  n_assemblages  mean_pu  std_pu  max_pu   cv
+     Pre-Oldowan              2     3.00    0.00       3 0.00
+         Oldowan             13     4.85    2.08      10 0.43
+ Early Acheulean              4     7.50    1.73      10 0.23
+Middle Acheulean             10     7.50    2.68      12 0.36
+  Late Acheulean              9    10.44    3.61      16 0.35
+             MSA             21    11.38    3.38      21 0.30
+             UP+             93    11.60    4.38      25 0.38
+
+--- 4. Irreversibility check ---
+   Active PUs:                  31
+   PUs lost after appearance:   0
+   No PU disappears from the record after first appearance.
+
+Figure written to: fig_pu_acceleration.pdf
+
+Done.
